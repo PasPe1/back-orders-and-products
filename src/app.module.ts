@@ -2,28 +2,40 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ProductModule } from './modules/products/products.module';
+import typeorm from './config/typeorm';
+import { OrderModule } from './modules/orders/orders.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { UsersController } from './modules/users/users.controller';
+import { ProductsController } from './modules/products/products.controller';
+import { OrdersController } from './modules/orders/orders.controller';
+import { AuthController } from './modules/auth/auth.controller';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      isGlobal: true,
+      load: [typeorm],
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: +process.env.POSTGRES_PORT_EXT,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      entities: [],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        configService.get('typeorm'),
     }),
+    ProductModule,
+    OrderModule,
+    UsersModule,
+    AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController,
+    UsersController,
+    ProductsController,
+    OrdersController,
+    AuthController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}
