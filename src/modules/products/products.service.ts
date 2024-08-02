@@ -1,14 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Product } from './products.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductDto } from './dto/product.dto';
+import { OrdersService } from '../orders/orders.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
+    private orderService: OrdersService,
   ) {}
 
   async findOneProductById(id: number): Promise<Product | undefined> {
@@ -16,15 +18,28 @@ export class ProductsService {
   }
 
   async getAllProducts() {
-    return await this.productsRepository.query(`SELECT * FROM PRODUCTS`);
+    const sortField = 'sequence';
+    const sortOrder = 'ASC';
+    return await this.productsRepository.find({
+      order: {
+        [sortField]: sortOrder,
+      },
+    });
   }
 
   async createProduct(dto: ProductDto) {
-    if (await this.productsRepository.findOneBy({ title: dto.title })) {
-      throw new ConflictException('Product already exist');
+    // if (await this.productsRepository.findOneBy({ title: dto.title })) {
+    //   throw new ConflictException('Product already exist');
+    // }
+
+    const order = await this.orderService.findOneOrderById(dto.orderId);
+    if (!order) {
+      throw new Error('Order not found');
     }
 
-    return await this.productsRepository.save(dto);
+    const product = this.productsRepository.create({ ...dto, order });
+
+    return await this.productsRepository.save(product);
   }
 
   async updateProduct(id: number, props: ProductDto) {

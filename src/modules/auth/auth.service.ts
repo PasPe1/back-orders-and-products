@@ -24,7 +24,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(dto: UserDto): Promise<Tokens> {
+  async register(dto: UserDto): Promise<Tokens> {
     if (await this.usersRepository.findOneBy({ email: dto.email })) {
       throw new ConflictException('User already exist');
     }
@@ -38,17 +38,19 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRtHash(user.id, tokens.refresh_token);
 
-    return tokens;
+    return { id: user.id, ...tokens };
   }
 
-  async signIn(email: string, password: string): Promise<Tokens> {
+  async login(email: string, password: string): Promise<Tokens> {
     const user = await this.usersService.findOneByEmail(email);
 
     if (!(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException();
     }
 
-    return await this.getTokens(user.id, user.email);
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    return { id: user.id, ...tokens };
   }
 
   private async getPasswordHash(password: string): Promise<string> {
@@ -65,7 +67,8 @@ export class AuthService {
     return true;
   }
 
-  async refreshTokens(userId: number, rt: string): Promise<any> {
+  async refreshToken(rt: string): Promise<Tokens> {
+    const { userId } = this.jwtService.decode(rt);
     const user = await this.usersService.findOneById(userId);
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
@@ -89,7 +92,7 @@ export class AuthService {
     );
   }
 
-  async getTokens(userId: number, email: string): Promise<any> {
+  async getTokens(userId: number, email: string): Promise<Tokens> {
     const jwtPayload: JwtPayload = {
       userId: userId,
       email: email,

@@ -17,8 +17,9 @@ import { OrderDto } from './dto/order.dto';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  async getAllOrders(): Promise<string> {
+  async getAllOrders(): Promise<Order[]> {
     return await this.ordersService.getAllOrders();
   }
 

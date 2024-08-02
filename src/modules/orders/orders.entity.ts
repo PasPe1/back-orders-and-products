@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Product } from '../products/products.entity';
 
 @Entity()
@@ -21,9 +15,6 @@ export class Order {
   @Column()
   description: string;
 
-  // @OneToMany(() => Product, (product) => product.order)
-  // products: Product[]
-  @ManyToMany(() => Product)
-  @JoinTable()
+  @OneToMany(() => Product, (product) => product.order)
   products: Product[];
 }

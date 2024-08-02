@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Order } from './orders.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 
 @Injectable()
@@ -12,11 +12,13 @@ export class OrdersService {
   ) {}
 
   async findOneOrderById(id: number): Promise<Order | undefined> {
-    return await this.ordersRepository.findOneBy({ id });
+    return await this.ordersRepository.findOneBy({ id: Equal(id) });
   }
 
   async getAllOrders() {
-    return await this.ordersRepository.query(`SELECT * FROM ORDERS`);
+    return await this.ordersRepository.find({
+      relations: ['products'],
+    });
   }
 
   async createOrder(dto: OrderDto) {

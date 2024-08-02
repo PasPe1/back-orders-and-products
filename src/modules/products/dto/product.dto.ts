@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsObject, IsString } from 'class-validator';
 
 export class ProductDto {
   @IsNumber()
@@ -22,15 +22,21 @@ export class ProductDto {
   @IsString()
   specification: string;
 
-  @IsNotEmpty()
-  guarantee: string;
-
-  @IsNotEmpty()
-  price: string;
-
   @IsNumber()
-  order: number;
+  sequence: number;
+
+  @IsObject()
+  guarantee: {
+    start: Date;
+    end: Date;
+  };
+
+  @IsArray()
+  price: { value: number; symbol: string; isDefault: number }[];
 
   @IsString()
   date: string;
+
+  @IsNumber()
+  orderId: number;
 }

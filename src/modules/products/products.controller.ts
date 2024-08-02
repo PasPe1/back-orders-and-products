@@ -17,8 +17,9 @@ import { ProductDto } from './dto/product.dto';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  async getAllProducts(): Promise<string> {
+  async getAllProducts(): Promise<Product[]> {
     return await this.productsService.getAllProducts();
   }
 
