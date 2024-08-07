@@ -27,6 +27,7 @@ Apps for creating a user, orders, products. Products are have relationship Many-
 
 ## command for start project in docker: docker-compose up -d --build
 
+docker: docker-compose up -d --build
 
 for dev: 
 
