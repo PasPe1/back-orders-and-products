@@ -23,6 +23,7 @@
 
 ## command for start project in docker: docker-compose up -d --build
 
+docker: docker-compose up -d --build
 
 for dev: 
 
