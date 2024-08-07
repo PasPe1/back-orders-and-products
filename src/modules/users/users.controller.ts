@@ -45,9 +45,4 @@ export class UsersController {
   async delete(@Param('id') id: number) {
     return this.usersService.deleteUser(id);
   }
-
-  //   @Get(':email')
-  //   async getUserByEmail(@Param('email') email: string): Promise<User> {
-  //     return await this.usersService.findOneByEmail(email);
-  //   }
 }

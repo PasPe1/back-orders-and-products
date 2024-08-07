@@ -27,11 +27,15 @@ export class ProductsService {
     });
   }
 
-  async createProduct(dto: ProductDto) {
-    // if (await this.productsRepository.findOneBy({ title: dto.title })) {
-    //   throw new ConflictException('Product already exist');
-    // }
+  async getProductsByOrder(orderId: number) {
+    return await this.productsRepository.find({
+      where: {
+        order: { id: orderId },
+      },
+    });
+  }
 
+  async createProduct(dto: ProductDto) {
     const order = await this.orderService.findOneOrderById(dto.orderId);
     if (!order) {
       throw new Error('Order not found');

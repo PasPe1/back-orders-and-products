@@ -16,7 +16,6 @@ import { ProductDto } from './dto/product.dto';
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
-
   @UseGuards(JwtAuthGuard)
   @Get()
   async getAllProducts(): Promise<Product[]> {
@@ -27,6 +26,12 @@ export class ProductsController {
   @Get(':id')
   async getProductById(@Param('id') id: number): Promise<Product> {
     return await this.productsService.findOneProductById(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('getByOrder/:id')
+  async getProductsByOrder(@Param('id') orderId: number): Promise<Product[]> {
+    return await this.productsService.getProductsByOrder(orderId);
   }
 
   @UseGuards(JwtAuthGuard)

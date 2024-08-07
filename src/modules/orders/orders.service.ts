@@ -26,7 +26,12 @@ export class OrdersService {
       throw new ConflictException('Order already exist');
     }
 
-    return await this.ordersRepository.save(dto);
+    const newOrder = this.ordersRepository.create({
+      ...dto,
+      products: [],
+    });
+
+    return await this.ordersRepository.save(newOrder);
   }
 
   async updateOrder(id: number, props: OrderDto) {

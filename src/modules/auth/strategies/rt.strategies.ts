@@ -3,7 +3,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { jwtConstants } from '../constants';
-// import { JwtPayload, JwtPayloadWithRt } from '../types';
 
 @Injectable()
 export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {

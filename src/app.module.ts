@@ -12,6 +12,7 @@ import { UsersController } from './modules/users/users.controller';
 import { ProductsController } from './modules/products/products.controller';
 import { OrdersController } from './modules/orders/orders.controller';
 import { AuthController } from './modules/auth/auth.controller';
+import { WebSocketModule } from './websocket/websocket.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AuthController } from './modules/auth/auth.controller';
     OrderModule,
     UsersModule,
     AuthModule,
+    WebSocketModule,
   ],
   controllers: [
     AppController,
