@@ -21,6 +21,10 @@
 </p>
 
 
+# Description
+
+Apps for creating a user, orders, products. Products are have relationship Many-To-One order. Endpoints for getting, creating and changing listed entities
+
 ## command for start project in docker: docker-compose up -d --build
 
 
