@@ -1,15 +1,15 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class OrderDto {
-  @IsNumber()
-  id: number;
-
   @IsString()
+  @IsNotEmpty()
   title: string;
 
   @IsString()
+  @IsNotEmpty()
   date: string;
 
   @IsString()
+  @IsNotEmpty()
   description: string;
 }

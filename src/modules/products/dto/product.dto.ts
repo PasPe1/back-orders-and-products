@@ -1,25 +1,33 @@
-import { IsArray, IsNumber, IsObject, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsString,
+} from 'class-validator';
 
 export class ProductDto {
   @IsNumber()
-  id: number;
-
-  @IsNumber()
+  @IsNotEmpty()
   serialNumber: number;
 
   @IsNumber()
+  @IsNotEmpty()
   isNew: number;
 
   @IsString()
   photo: string;
 
   @IsString()
+  @IsNotEmpty()
   title: string;
 
   @IsString()
+  @IsNotEmpty()
   type: string;
 
   @IsString()
+  @IsNotEmpty()
   specification: string;
 
   @IsNumber()
@@ -35,6 +43,7 @@ export class ProductDto {
   price: { value: number; symbol: string; isDefault: number }[];
 
   @IsString()
+  @IsNotEmpty()
   date: string;
 
   @IsNumber()
